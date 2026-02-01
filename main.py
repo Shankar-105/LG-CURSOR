@@ -6,11 +6,11 @@ async def main():
     await client.connect()
 
     # Test get volume
-    volume = await client.send_command("ssap://audio/getVolume")
+    volume = await client.send_command("ssap://audio/getVolume",subscribe=True)
     print("Current Volume:", volume)
 
     # Set volume
-    # await client.send_command("ssap://audio/setVolume", {"volume": 10})
+    await client.send_command("ssap://audio/setVolume", {"volume": 20})
 
     # Power off (careful!)
     # await client.send_command("ssap://system/turnOff")
