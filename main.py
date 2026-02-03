@@ -2,6 +2,7 @@ import asyncio
 from remote import client,discover
 
 tv_info = discover.discover_lg_tv()
+print(tv_info)
 async def main():
     if tv_info:
         print(f"Found TV at {tv_info['ip']}: {tv_info['friendly_name']}")
@@ -11,5 +12,5 @@ async def main():
         await connector.close()
     else:
         print("No LG TV found. Check network/TV is on.")
-        
+
 asyncio.run(main())
