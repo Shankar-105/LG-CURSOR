@@ -54,7 +54,7 @@ def discover_lg_tv(timeout: int = 10) -> Optional[Dict[str, str]]:
                 print(f"Location found: {location}")
                 # Fetch and parse XML
                 try:
-                    xml_response = requests.get(location, timeout=5)
+                    xml_response = requests.get(location,timeout=5)
                     xml_response.raise_for_status()
                     xml_text = xml_response.text
                     print(f"XML content (full):\n{xml_text}")  # Print full for debug

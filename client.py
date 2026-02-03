@@ -4,7 +4,7 @@ import json
 import ssl
 import os
 from dotenv import set_key, find_dotenv
-from .config import settings
+from config import settings
 
 class WebOSClient:
 
@@ -166,6 +166,29 @@ class WebOSClient:
             return None
         print(f"PayLoad of the Above Response {resp_dict.get("payload",resp_dict)}")
         return resp_dict.get("payload",resp_dict)  # Return data
+    #  AUDIO RELATED ENDPOINTS
+    async def get_mute(self):
+        return await self.send_command("ssap://audio/getMute")
+
+    async def set_mute(self, mute: bool = True):
+        return await self.send_command("ssap://audio/setMute", {"mute": mute})
+
+    async def get_volume(self):
+        return await self.send_command("ssap://audio/getVolume")
+
+    async def set_volume(self, volume: int = 20):  # 0-100 typically
+        if not 0 <= volume <= 100:
+            raise ValueError("Volume must be 0-100")
+        return await self.send_command("ssap://audio/setVolume", {"volume": volume})
+
+    async def volume_up(self):
+        return await self.send_command("ssap://audio/volumeUp")
+
+    async def volume_down(self):
+        return await self.send_command("ssap://audio/volumeDown")
+
+    async def get_audio_status(self):
+        return await self.send_command("ssap://audio/getStatus")
     
     async def close(self):
         if self.ws:

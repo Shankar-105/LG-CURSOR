@@ -1,5 +1,5 @@
 import asyncio
-from remote import client,discover
+import discover,client
 
 tv_info = discover.discover_lg_tv()
 print(tv_info)
@@ -9,6 +9,7 @@ async def main():
         tv_ip = tv_info.get('ip')
         connector = client.WebOSClient(f"{tv_ip}")  # Your IP
         await connector.connect()
+        await connector.getVolume()
         await connector.close()
     else:
         print("No LG TV found. Check network/TV is on.")
