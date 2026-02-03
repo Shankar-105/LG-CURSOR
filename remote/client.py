@@ -5,6 +5,7 @@ import ssl
 import os
 from dotenv import set_key, find_dotenv
 from .config import settings
+
 class WebOSClient:
 
     def __init__(self, tv_ip, client_key_file=settings.client_key):
@@ -141,9 +142,9 @@ class WebOSClient:
                 print("Error:", resp_dict)
                 raise Exception("Register failed")
 
-    async def send_command(self, uri, payload=None, subscribe :bool =False):
+    async def send_command(self,uri,payload=None):
         self.request_id += 1
-        msg_type = "subscribe" if subscribe else "request"
+        msg_type = "request"
         msg = {
             "type": msg_type,
             "id": f"cmd_{self.request_id}",
@@ -156,14 +157,17 @@ class WebOSClient:
         # Wait for response
         resp = await self.ws.recv()
         resp_dict = json.loads(resp)
+        print(f"Actual Response from  LG Tv {resp_dict}")
         if resp_dict.get("id") != msg["id"]:
-            print("ID mismatch! Ignoring.")
+            print("ID mismatch!")
             return None
         if resp_dict.get("type") == "error":
-            print("Error:", resp_dict)
+            print("That's an Error:",resp_dict)
             return None
-        return resp_dict.get("payload", resp_dict)  # Return data
+        print(f"PayLoad of the Above Response {resp_dict.get("payload",resp_dict)}")
+        return resp_dict.get("payload",resp_dict)  # Return data
     
     async def close(self):
         if self.ws:
+            print("Bye byee Socket Closing")
             await self.ws.close()
