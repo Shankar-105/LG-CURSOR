@@ -157,14 +157,13 @@ class WebOSClient:
         # Wait for response
         resp = await self.ws.recv()
         resp_dict = json.loads(resp)
-        print(f"Actual Response from  LG Tv {resp_dict}")
         if resp_dict.get("id") != msg["id"]:
             print("ID mismatch!")
             return None
         if resp_dict.get("type") == "error":
             print("That's an Error:",resp_dict)
             return None
-        print(f"PayLoad of the Above Response {resp_dict.get("payload",resp_dict)}")
+        print(f"PayLoad of the Above Response From TV {resp_dict.get("payload",resp_dict)}")
         return resp_dict.get("payload",resp_dict)  # Return data
     #  AUDIO RELATED ENDPOINTS
     async def get_mute(self):
@@ -190,6 +189,28 @@ class WebOSClient:
     async def get_audio_status(self):
         return await self.send_command("ssap://audio/getStatus")
     
+    async def list_apps(self):
+        return await self.send_command("ssap://com.webos.applicationManager/listApps")
+
+    async def list_launch_points(self):
+        return await self.send_command("ssap://com.webos.applicationManager/listLaunchPoints")
+
+    async def get_foreground_app(self):
+        return await self.send_command("ssap://com.webos.applicationManager/getForegroundAppInfo")
+
+    async def launch_app(self, app_id: str, params: dict = None):
+        payload = {"id": app_id}
+        if params:
+            payload["params"] = params
+        return await self.send_command("ssap://system.launcher/launch", payload)
+
+    # Convenience shortcuts (these are what the real remote buttons do)
+    async def launch_netflix(self):     return await self.launch_app("netflix")
+    async def launch_youtube(self):     return await self.launch_app("youtube.leanback.v4")
+    async def launch_prime_video(self): return await self.launch_app("amazon")
+    async def launch_disney_plus(self): return await self.launch_app("disneyplus")
+    async def launch_hulu(self):        return await self.launch_app("hulu")
+
     async def close(self):
         if self.ws:
             print("Bye byee Socket Closing")

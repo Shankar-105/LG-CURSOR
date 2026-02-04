@@ -3,7 +3,6 @@ import time
 import requests
 import xml.etree.ElementTree as ET
 from typing import Optional, Dict, List
-from urllib.parse import unquote  # For decoding DLNA header if needed
 
 def discover_lg_tv(timeout: int = 10) -> Optional[Dict[str, str]]:
     """
@@ -51,13 +50,13 @@ def discover_lg_tv(timeout: int = 10) -> Optional[Dict[str, str]]:
             
             if location and location not in seen_locations:
                 seen_locations.add(location)
-                print(f"Location found: {location}")
+                print(f"Location of XML File found: {location}")
                 # Fetch and parse XML
                 try:
                     xml_response = requests.get(location,timeout=5)
                     xml_response.raise_for_status()
                     xml_text = xml_response.text
-                    print(f"XML content (full):\n{xml_text}")  # Print full for debug
+                    # print(f"XML content (full):\n{xml_text}")  # Print full for debug
                     
                     tree = ET.ElementTree(ET.fromstring(xml_text))
                     root = tree.getroot()
