@@ -1,4 +1,5 @@
 /venv
+# exclude pyc
 __pycache__/
 # exclude the env file
 .env

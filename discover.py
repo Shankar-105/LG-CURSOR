@@ -31,7 +31,7 @@ def discover_lg_tv(timeout: int = 10) -> Optional[Dict[str, str]]:
     
     # Send the M-SEARCH
     sock.sendto(MSEARCH_MSG, (multicast_group, port))
-    print("Sent M-SEARCH broadcast. Listening for responses...")
+    print("Sent M-SEARCH Multicast. Listening for responses...")
     
     potential_devices: List[Dict[str, str]] = []
     seen_locations: set = set()  # Deduplicate by location to avoid repeats
